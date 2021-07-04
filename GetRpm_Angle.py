@@ -4,10 +4,10 @@ sheet1 = workbook["Sheet1"]
 sheet2 = workbook["Sheet2"]
 SpeedToRpm = {}
 SpeedToRpm[0] = 0
-RadiusToAngel_L = {}
-RadiusToAngel_L[0] = 90
-RadiusToAngel_R = {}
-RadiusToAngel_R[0] = 90
+RadiusToAngle_L = {}
+RadiusToAngle_L[0] = 90
+RadiusToAngle_R = {}
+RadiusToAngle_R[0] = 90
 row_index = 0
 V = 0
 R = 0
@@ -37,13 +37,12 @@ for row in sheet2.rows:
         continue
 
     R += (row[2].value  + Car_Width) / 2
-
     if row_index % 3 == 1:
         R /= 3.00
         if row[0].value == 'L':
-            RadiusToAngel_L[R] == row[1].value
+            RadiusToAngle_L[R] = row[1].value
         if row[0].value == 'R':
-            RadiusToAngel_R[R] == row[1].value
+            RadiusToAngle_R[R] = row[1].value
         R = 0
     else:
         continue
@@ -65,40 +64,40 @@ def GoodRpm(Exp = 0):
 
     return int((((Exp - MinSpeed) * (MaxRpm - MinRpm)) / (MaxSpeed - MinSpeed)) + MinRpm)
 
-def GoodAngel_L(Exp = 0):
+def GoodAngle_L(Exp = 0):
     MinRadius = 0
     MaxRadius = 0
-    MinAngel = 0
-    MaxAngel = 0
-    for radius in RadiusToAngel_L:
+    MinAngle = 0
+    MaxAngle = 0
+    for radius in RadiusToAngle_L:
         if radius <= Exp:
             MinRadius = radius
-            MinAngel = RadiusToAngel_L[radius]
+            MinAngle = RadiusToAngle_L[radius]
             break
         MaxRadius = radius
-        MaxAngel = RadiusToAngel_L[radius]
+        MaxAngle = RadiusToAngle_L[radius]
     
-    return int((((MaxRadius - Exp) * (MaxAngel - MinAngel)) / (MaxRadius - MinRadius)) + MinAngel)
+    return int((((MaxRadius - Exp) * (MaxAngle - MinAngle)) / (MaxRadius - MinRadius)) + MinAngle)
     
-def GoodAngel_R(Exp = 0):
+def GoodAngle_R(Exp = 0):
     MinRadius = 0
     MaxRadius = 0
-    MinAngel = 0
-    MaxAngel = 0
-    for radius in RadiusToAngel_R:
+    MinAngle = 0
+    MaxAngle = 0
+    for radius in RadiusToAngle_R:
         if radius <= Exp:
             MinRadius = radius
-            MinAngel = RadiusToAngel_R[radius]
+            MinAngle = RadiusToAngle_R[radius]
             break
         MaxRadius = radius
-        MaxAngel = RadiusToAngel_R[radius]
+        MaxAngle = RadiusToAngle_R[radius]
     
-    return int((((MaxRadius - Exp) * (MaxAngel - MinAngel)) / (MaxRadius - MinRadius)) + MinAngel)
+    return int((((MaxRadius - Exp) * (MaxAngle - MinAngle)) / (MaxRadius - MinRadius)) + MinAngle)
 
 def GetData(Type, Exp):
     if Type == "rpm" or Type == "RPM":
         return GoodRpm(Exp)
     if Type == "L" or Type == "l":
-        return GoodAngel_L(Exp)
+        return GoodAngle_L(Exp)
     if Type == "R" or Type == 'r':
-        return GoodAngel_R(Exp)
+        return GoodAngle_R(Exp)
