@@ -1,53 +1,29 @@
-import openpyxl
-workbook = openpyxl.load_workbook(filename="SpeedData.xlsx", read_only=True)
-sheet1 = workbook["Sheet1"]
-sheet2 = workbook["Sheet2"]
+import csv
 SpeedToRpm = {}
 SpeedToRpm[0] = 0
 RadiusToAngle_L = {}
 RadiusToAngle_L[0] = 90
 RadiusToAngle_R = {}
 RadiusToAngle_R[0] = 90
-row_index = 0
-V = 0
-R = 0
-
-for row in sheet1.rows:
-    row_index += 1
-
-    if row_index == 1:
-        continue
-
-    V += row[1].value / row[2].value
-
-    if row_index % 3 == 1:
-        V /= 3.00
-        SpeedToRpm[V] = row[0].value
-        V = 0
-    else:
-        continue
-
-row_index = 0
 Car_Width = 19.5
 
-for row in sheet2.rows:
-    row_index += 1
+with open('SpeedData.csv', 'r') as csvfile:
+    reader = csv.reader(csvfile)
+    rows = [row for row in reader]
 
-    if row_index == 1:
-        continue
+for row in rows:
+    SpeedToRpm[eval(row[0])] = eval(row[1])
 
-    R += (row[2].value  + Car_Width) / 2
-    if row_index % 3 == 1:
-        R /= 3.00
-        if row[0].value == 'L':
-            RadiusToAngle_L[R] = row[1].value
-        if row[0].value == 'R':
-            RadiusToAngle_R[R] = row[1].value
-        R = 0
-    else:
-        continue
+with open('AngelData.csv', 'r') as csvfile:
+    reader = csv.reader(csvfile)
+    rows = [row for row in reader]
 
-workbook.close()
+for row in rows:
+    if row[0] == 'L':
+        RadiusToAngle_L[eval(row[1])] = eval(row[2])
+    if row[0] == 'R':
+        RadiusToAngle_R[eval(row[1])] = eval(row[2])
+
 
 def GoodRpm(Exp = 0):
     MinRpm = 0
