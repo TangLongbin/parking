@@ -24,6 +24,8 @@ for row in rows:
     if row[0] == 'R':
         RadiusToAngle_R[eval(row[1])] = eval(row[2])
 
+RadiusToAngle_L[200] = 0
+RadiusToAngle_R[200] = 0
 
 def GoodRpm(Exp = 0):
     MinRpm = 0
@@ -37,8 +39,11 @@ def GoodRpm(Exp = 0):
             break
         MinRpm = SpeedToRpm[speed]
         MinSpeed = speed
+    if MaxSpeed == MinSpeed:
+        return 0
+    else:
+        return int((((Exp - MinSpeed) * (MaxRpm - MinRpm)) / (MaxSpeed - MinSpeed)) + MinRpm)
 
-    return int((((Exp - MinSpeed) * (MaxRpm - MinRpm)) / (MaxSpeed - MinSpeed)) + MinRpm)
 
 def GoodAngle_L(Exp = 0):
     MinRadius = 0
@@ -46,14 +51,16 @@ def GoodAngle_L(Exp = 0):
     MinAngle = 0
     MaxAngle = 0
     for radius in RadiusToAngle_L:
-        if radius <= Exp:
-            MinRadius = radius
+        if radius >= Exp:
+            MaxRadius = radius
             MinAngle = RadiusToAngle_L[radius]
             break
-        MaxRadius = radius
+        MinRadius = radius
         MaxAngle = RadiusToAngle_L[radius]
-    
-    return int((((MaxRadius - Exp) * (MaxAngle - MinAngle)) / (MaxRadius - MinRadius)) + MinAngle)
+    if MaxRadius == MinRadius:
+        return 0
+    else:
+        return int((((MaxRadius - Exp) * (MaxAngle - MinAngle)) / (MaxRadius - MinRadius)) + MinAngle)
     
 def GoodAngle_R(Exp = 0):
     MinRadius = 0
@@ -61,14 +68,16 @@ def GoodAngle_R(Exp = 0):
     MinAngle = 0
     MaxAngle = 0
     for radius in RadiusToAngle_R:
-        if radius <= Exp:
-            MinRadius = radius
+        if radius >= Exp:
+            MaxRadius = radius
             MinAngle = RadiusToAngle_R[radius]
             break
-        MaxRadius = radius
+        MinRadius = radius
         MaxAngle = RadiusToAngle_R[radius]
-    
-    return int((((MaxRadius - Exp) * (MaxAngle - MinAngle)) / (MaxRadius - MinRadius)) + MinAngle)
+    if MaxRadius == MinRadius:
+        return 0
+    else:
+        return int((((MaxRadius - Exp) * (MaxAngle - MinAngle)) / (MaxRadius - MinRadius)) + MinAngle)
 
 def GetData(Type, Exp):
     if Type == "rpm" or Type == "RPM":
