@@ -5,6 +5,7 @@ import RPi.GPIO as GPIO
 Tri = [11,36,40,7]
 #四个超声波的Echo引脚对应的GPIO编号
 Echo = [13,15,38,12]
+#前:后:左:右
 
 GPIO.setmode(GPIO.BOARD)
 GPIO.setwarnings(False)
