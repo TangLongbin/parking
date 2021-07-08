@@ -29,7 +29,7 @@ def ParkType():
     #判断车位类型(V/P)
     #V表示垂直泊车
     #P表示平行泊车
-    #返回('L/R' , 'V/P' , Length , Width)
+    #返回('L/R' , 'V/P' , Length , Width , E)
     x = Init()
     #左右对应的超声波编号
     Dir = {'L' : 2 , 'R' : 3}
@@ -77,7 +77,7 @@ def ParkType():
             #停车
             MoveControl.GoStraight(0)
             Measure_average /= Measure_count
-            return x , P_Type[flag] , Length_Now , Measure_average - S_1
+            return x , P_Type[flag] , Length_Now , Measure_average - S_1 , 0
 
         S_Measure = GetDistance.GetOneDistance(Dir[x])
         S_2 = S_Measure
@@ -91,7 +91,7 @@ def ParkType():
     #停车并返回车位类型
     MoveControl.GoStraight(0)
     if (flag == 0 and Length_Now >= P_Width) or (flag == 1 and Length_Now >= V_Depth):
-        return x , P_Type[flag] , Length_Now , Measure_average - (S_1 + S_2) / 2
+        return x , P_Type[flag] , Length_Now , Measure_average - (S_1 + S_2) / 2 , S_2
         
     #若车位不满足条件,则进行下一次车位测量
     return ParkType()
